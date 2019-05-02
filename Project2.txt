@@ -1,0 +1,103 @@
+package cryptography;
+public class Encrypt2 extends javax.swing.JFrame {
+    public Encrypt2() {
+        initComponents();
+    }
+    public String PText = "";
+    public String Input="";
+    public String key1 = "";
+    public String CipherText = "";
+    public String DecryptText = "";
+    public int key2;
+    public int len;
+    public Encrypt2(String msg,String k1,String k2) {
+        initComponents();
+        Input = msg;
+        PText = Input.replaceAll("\\s", "");
+        key1  = k1;
+        key2  = Integer.parseInt(k2);
+    }
+    String Encryption(String emsg, String key1, int key2 )
+    {
+      String result = "";
+       len = emsg.length();
+       
+       for(int i=0; i < len; i++)
+       {
+           char c = emsg.charAt(i);
+           char k = key1.charAt(i);
+           result += (char)((c + k - 2 * '0') % 43 + '0' + key2 ); 
+       }
+       
+       int r = key2;
+       int c = len/key2 +1;
+       int k = 0;
+       
+       char ct[][] = new char[r][c];
+       
+       for(int i=0;i< c;i++)
+        {
+            for(int j=0;j< r;j++)
+            {
+                if(k!=len)
+                    ct[j][i]= result.charAt(k++);
+                else
+                {
+                    ct[j][i] = '#';
+                }   
+            }
+        }
+        for(int i=0;i< r;i++)
+        {
+            for(int j=0;j< c;j++)
+            {
+                CipherText+=ct[i][j];
+            }
+        }
+       
+      //return result;  
+    return CipherText;
+    }
+    
+    String Decryption(String Ctext, String key1, int key2)
+    {
+        int l = Ctext.length();
+        int r = key2;
+        int c = l/key2;
+        char dt[][] = new char[r][c];
+        int k=0;
+        
+        for(int i=0;i< r;i++)
+          {
+            for(int j=0;j< c;j++)
+            {    
+                dt[i][j]=Ctext.charAt(k++);
+            }
+          }
+            for(int i=0;i< c;i++)
+            { 
+              for(int j=0;j< r;j++)
+                {
+                  DecryptText+=dt[j][i];
+                }
+            }
+            String DecryptText1 = DecryptText.replaceAll("#","");
+            String DText="";
+            int lt =DecryptText1.length();
+            char d,k1;
+            for(int i = 0; i< lt; i++)
+            {
+                d = DecryptText1.charAt(i);
+                k1= key1.charAt(i);
+                
+                int dtxt =(int)d-key2;
+                DText += (char)((dtxt-k1 + 43)%43 + '0');
+                
+                
+            }
+                     
+    return DText;
+    }
+    
+    
+    
